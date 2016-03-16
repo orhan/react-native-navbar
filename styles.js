@@ -18,7 +18,6 @@ module.exports = {
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: 7,
     alignItems: 'center',
   },
   navBarButton: {
