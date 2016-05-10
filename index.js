@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import React from 'react-native';
 const {
   PixelRatio,
   StatusBar,
