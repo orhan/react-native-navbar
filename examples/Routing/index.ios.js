@@ -1,11 +1,11 @@
-import React from 'react-native';
-const {
+import React, { Component } from 'react';
+import {
   AppRegistry,
   Component,
   Text,
   Navigator,
   View
-} = React;
+} from 'react-native';
 import NavigationBar from 'react-native-navbar';
 import InitialScreen from './components/InitialScreen';
 

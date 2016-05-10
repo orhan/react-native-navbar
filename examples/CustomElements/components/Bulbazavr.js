@@ -1,9 +1,8 @@
-import React from 'react-native';
-const {
-  Component,
+import React, { Component } from 'react';
+import {
   Image,
   TouchableOpacity
-} = React;
+} from 'react-native';
 
 export default class Bulbazavr extends Component {
   render() {

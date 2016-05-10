@@ -1,8 +1,7 @@
-import React from 'react-native';
+import React, { Component } from 'react';
 const {
-  Component,
   View
-} = React;
+} from 'react-native';
 import NavigationBar from 'react-native-navbar';
 import CustomScreen from './CustomScreen';
 

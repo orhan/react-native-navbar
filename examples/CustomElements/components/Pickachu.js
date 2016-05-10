@@ -1,10 +1,9 @@
-import React from 'react-native';
-const {
-  Component,
+import React, { Component } from 'react';
+import {
   Image,
   Text,
   View
-} = React;
+} from 'react-native';
 
 export default class Title extends Component {
   render() {
