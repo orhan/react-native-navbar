@@ -1,13 +1,13 @@
+import React, { Component, PropTypes } from 'react';
 import React from 'react-native';
 const {
   PixelRatio,
   StatusBar,
-  Component,
   Text,
   View,
-  PropTypes,
   Platform
-} = React;
+} from 'react-native';
+
 import NavbarButton from './NavbarButton';
 import styles from './styles';
 
