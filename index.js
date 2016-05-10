@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-const {
+import {
   PixelRatio,
   StatusBar,
   Text,
