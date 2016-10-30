@@ -18,6 +18,7 @@ const ButtonShape = {
 
 const TitleShape = {
   title: PropTypes.string.isRequired,
+  style: PropTypes.oneOfType([PropTypes.object, PropTypes.array,PropTypes.number]),
   tintColor: PropTypes.string,
 };
 
@@ -25,20 +26,26 @@ const StatusBarShape = {
   style: PropTypes.oneOf(['light-content', 'default', ]),
   hidden: PropTypes.bool,
   tintColor: PropTypes.string,
+  animated: PropTypes.bool, // affects `style` and `hidden`
   hideAnimation: PropTypes.oneOf(['fade', 'slide', 'none', ]),
   showAnimation: PropTypes.oneOf(['fade', 'slide', 'none', ])
 };
 
 function customizeStatusBar(data) {
   if (Platform.OS === 'ios') {
+    const animated = (data.animated || NavigationBar.defaultProps.statusBar.animated)
     if (data.style) {
-      StatusBar.setBarStyle(data.style, true);
+      StatusBar.setBarStyle(data.style, animated);
     }
-    const animation = data.hidden ?
-    (data.hideAnimation || NavigationBar.defaultProps.statusBar.hideAnimation) :
-    (data.showAnimation || NavigationBar.defaultProps.statusBar.showAnimation);
-
-    StatusBar.setHidden(data.hidden, animation);
+    if (data.hidden !== undefined) {
+      let showHideTransition = 'none';
+      if (animated) {
+        showHideTransition = data.hidden ?
+          (data.hideAnimation || NavigationBar.defaultProps.statusBar.hideAnimation) :
+          (data.showAnimation || NavigationBar.defaultProps.statusBar.showAnimation);
+      }
+      StatusBar.setHidden(data.hidden, showHideTransition);
+    }
   }
 }
 
@@ -48,19 +55,21 @@ class NavigationBar extends Component {
   }
 
   componentWillReceiveProps(props) {
-    customizeStatusBar(this.props.statusBar);
+    customizeStatusBar(props.statusBar);
   }
 
   getButtonElement(data = {}, style) {
-    if (!!data.props) {
-      return <View style={styles.navBarButton}>{data}</View>;
-    }
-
-    return <NavbarButton
-      title={data.title}
-      style={[data.style, style, ]}
-      tintColor={data.tintColor}
-      handler={data.handler} />;
+    return (
+      <View style={styles.navBarButtonContainer}>
+        {(!!data.props) ? data : (
+          <NavbarButton
+            title={data.title}
+            style={[data.style, style, ]}
+            tintColor={data.tintColor}
+            handler={data.handler}/>
+        )}
+      </View>
+    );
   }
 
   getTitleElement(data) {
@@ -69,12 +78,15 @@ class NavigationBar extends Component {
     }
 
     const colorStyle = data.tintColor ? { color: data.tintColor, } : null;
+    const style = data.style ? data.style : styles.navBarTitleText;
 
     return (
-      <Text
-        style={[styles.navBarTitleText, colorStyle, ]}>
-        {data.title}
-      </Text>
+      <View style={styles.navBarTitleContainer}>
+        <Text
+          style={[style, colorStyle, ]}>
+          {data.title}
+        </Text>
+      </View>
     );
   }
 
@@ -85,8 +97,12 @@ class NavigationBar extends Component {
     const customStatusBarTintColor = this.props.statusBar.tintColor ?
       { backgroundColor: this.props.statusBar.tintColor } : null;
 
-    const statusBar = !this.props.statusBar.hidden ?
-      <View style={[styles.statusBar, customStatusBarTintColor ]} /> : null;
+    let statusBar = null;
+
+    if (Platform.OS === 'ios') {
+      statusBar = !this.props.statusBar.hidden ?
+        <View style={[styles.statusBar, customStatusBarTintColor ]} /> : null;
+    }
 
     return (
       <View style={[styles.navBarContainer, customTintColor, ]}>
@@ -121,6 +137,7 @@ class NavigationBar extends Component {
     statusBar: {
       style: 'default',
       hidden: false,
+      animated: false,
       hideAnimation: 'slide',
       showAnimation: 'slide',
     },
