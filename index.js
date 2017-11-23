@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import {
   PixelRatio,
   StatusBar,
@@ -7,6 +7,7 @@ import {
   Platform
 } from 'react-native';
 
+import PropTypes from 'prop-types';
 import NavbarButton from './NavbarButton';
 import styles from './styles';
 
